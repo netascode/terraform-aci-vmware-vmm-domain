@@ -3,14 +3,14 @@ version: '>= 0.14.0'
 formatter: markdown table
 
 content: |-
-  [![Tests](https://github.com/netascode/terraform-aci-scaffolding/actions/workflows/test.yml/badge.svg)](https://github.com/netascode/terraform-aci-scaffolding/actions/workflows/test.yml)
+  [![Tests](https://github.com/netascode/terraform-aci-vmware-vmm-domain/actions/workflows/test.yml/badge.svg)](https://github.com/netascode/terraform-aci-vmware-vmm-domain/actions/workflows/test.yml)
 
-  # Terraform ACI Scaffolding Module
+  # Terraform ACI VMware VMM Domain Module
 
-  Description
+  Manages ACI VMware VMM Domain
 
   Location in GUI:
-  `Tenants` » `XXX`
+  `Virtual Networking` » `VMware`
 
   ## Examples
 

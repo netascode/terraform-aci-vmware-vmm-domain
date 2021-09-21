@@ -14,33 +14,38 @@ terraform {
 module "main" {
   source = "../.."
 
-  name = "ABC"
+  name      = "VMW1"
+  vlan_pool = "VP1"
 }
 
-data "aci_rest" "fvTenant" {
-  dn = "uni/tn-ABC"
+data "aci_rest" "vmmDomP" {
+  dn = "uni/vmmp-VMware/dom-${module.main.name}"
 
   depends_on = [module.main]
 }
 
-resource "test_assertions" "fvTenant" {
-  component = "fvTenant"
+resource "test_assertions" "vmmDomP" {
+  component = "vmmDomP"
 
   equal "name" {
     description = "name"
-    got         = data.aci_rest.fvTenant.content.name
-    want        = "ABC"
+    got         = data.aci_rest.vmmDomP.content.name
+    want        = module.main.name
   }
+}
 
-  equal "nameAlias" {
-    description = "nameAlias"
-    got         = data.aci_rest.fvTenant.content.nameAlias
-    want        = ""
-  }
+data "aci_rest" "infraRsVlanNs" {
+  dn = "${data.aci_rest.vmmDomP.id}/rsvlanNs"
 
-  equal "descr" {
-    description = "descr"
-    got         = data.aci_rest.fvTenant.content.descr
-    want        = ""
+  depends_on = [module.main]
+}
+
+resource "test_assertions" "infraRsVlanNs" {
+  component = "infraRsVlanNs"
+
+  equal "tDn" {
+    description = "tDn"
+    got         = data.aci_rest.infraRsVlanNs.content.tDn
+    want        = "uni/infra/vlanns-[VP1]-dynamic"
   }
 }
