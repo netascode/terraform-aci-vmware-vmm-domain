@@ -24,29 +24,29 @@ resource "aci_rest" "vmmVSwitchPolicyCont" {
 }
 
 resource "aci_rest" "vmmRsVswitchOverrideLldpIfPol" {
-  count      = var.vswitch.lldp_policy != null ? 1 : 0
+  count      = var.vswitch_lldp_policy != "" ? 1 : 0
   dn         = "${aci_rest.vmmVSwitchPolicyCont.id}/rsvswitchOverrideLldpIfPol"
   class_name = "vmmRsVswitchOverrideLldpIfPol"
   content = {
-    tDn = "uni/infra/lldpIfP-${var.vswitch.lldp_policy}"
+    tDn = "uni/infra/lldpIfP-${var.vswitch_lldp_policy}"
   }
 }
 
 resource "aci_rest" "vmmRsVswitchOverrideCdpIfPol" {
-  count      = var.vswitch.cdp_policy != null ? 1 : 0
+  count      = var.vswitch_cdp_policy != "" ? 1 : 0
   dn         = "${aci_rest.vmmVSwitchPolicyCont.id}/rsvswitchOverrideCdpIfPol"
   class_name = "vmmRsVswitchOverrideCdpIfPol"
   content = {
-    tDn = "uni/infra/cdpIfP-${var.vswitch.cdp_policy}"
+    tDn = "uni/infra/cdpIfP-${var.vswitch_cdp_policy}"
   }
 }
 
 resource "aci_rest" "vmmRsVswitchOverrideLacpPol" {
-  count      = var.vswitch.port_channel_policy != null ? 1 : 0
+  count      = var.vswitch_port_channel_policy != "" ? 1 : 0
   dn         = "${aci_rest.vmmVSwitchPolicyCont.id}/rsvswitchOverrideLacpPol"
   class_name = "vmmRsVswitchOverrideLacpPol"
   content = {
-    tDn = "uni/infra/lacplagp-${var.vswitch.port_channel_policy}"
+    tDn = "uni/infra/lacplagp-${var.vswitch_port_channel_policy}"
   }
 }
 

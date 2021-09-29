@@ -46,6 +46,50 @@ variable "vlan_pool" {
   }
 }
 
+variable "vswitch_cdp_policy" {
+  description = "vSwitch CDP policy name."
+  type        = string
+  default     = ""
+
+  validation {
+    condition     = can(regex("^[a-zA-Z0-9_.-]{0,64}$", var.vswitch_cdp_policy))
+    error_message = "Allowed characters: `a`-`z`, `A`-`Z`, `0`-`9`, `_`, `.`, `-`. Maximum characters: 64."
+  }
+}
+
+variable "vswitch_lldp_policy" {
+  description = "vSwitch LLDP policy name."
+  type        = string
+  default     = ""
+
+  validation {
+    condition     = can(regex("^[a-zA-Z0-9_.-]{0,64}$", var.vswitch_lldp_policy))
+    error_message = "Allowed characters: `a`-`z`, `A`-`Z`, `0`-`9`, `_`, `.`, `-`. Maximum characters: 64."
+  }
+}
+
+variable "vswitch_port_channel_policy" {
+  description = "vSwitch port channel policy name."
+  type        = string
+  default     = ""
+
+  validation {
+    condition     = can(regex("^[a-zA-Z0-9_.-]{0,64}$", var.vswitch_port_channel_policy))
+    error_message = "Allowed characters: `a`-`z`, `A`-`Z`, `0`-`9`, `_`, `.`, `-`. Maximum characters: 64."
+  }
+}
+
+variable "inband_epg" {
+  description = "Inband endpoint group name."
+  type        = string
+  default     = ""
+
+  validation {
+    condition     = can(regex("^[a-zA-Z0-9_.-]{0,64}$", var.inband_epg))
+    error_message = "Allowed characters: `a`-`z`, `A`-`Z`, `0`-`9`, `_`, `.`, `-`. Maximum characters: 64."
+  }
+}
+
 variable "vcenters" {
   description = "List of vCenter hosts. Choices `dvs_version`: `unmanaged`, `5.1`, `5.5`, `6.0`, `6.5`, `6.6`. Default value `dvs_version`: `unmanaged`. Default value `statistics`: false. Default value `mgmt_epg`: `inb`."
   type = list(object({
@@ -123,41 +167,5 @@ variable "credential_policies" {
       for c in var.credential_policies : can(regex("^[a-zA-Z0-9\\!#$%()*,-./:;@ _{|}~?&+]{1,128}$", c.username))
     ])
     error_message = "Maximum characters `username`: 128."
-  }
-}
-
-variable "vswitch" {
-  description = "vSwitch settings."
-  type = object({
-    cdp_policy          = optional(string)
-    lldp_policy         = optional(string)
-    port_channel_policy = optional(string)
-  })
-  default = {}
-
-  validation {
-    condition     = var.vswitch.cdp_policy == null || try(can(regex("^[a-zA-Z0-9_.-]{0,64}$", var.vswitch.cdp_policy)), false)
-    error_message = "Allowed characters `cdp_policy`: `a`-`z`, `A`-`Z`, `0`-`9`, `_`, `.`, `-`. Maximum characters: 64."
-  }
-
-  validation {
-    condition     = var.vswitch.lldp_policy == null || try(can(regex("^[a-zA-Z0-9_.-]{0,64}$", var.vswitch.lldp_policy)), false)
-    error_message = "Allowed characters `lldp_policy`: `a`-`z`, `A`-`Z`, `0`-`9`, `_`, `.`, `-`. Maximum characters: 64."
-  }
-
-  validation {
-    condition     = var.vswitch.port_channel_policy == null || try(can(regex("^[a-zA-Z0-9_.-]{0,64}$", var.vswitch.port_channel_policy)), false)
-    error_message = "Allowed characters `port_channel_policy`: `a`-`z`, `A`-`Z`, `0`-`9`, `_`, `.`, `-`. Maximum characters: 64."
-  }
-}
-
-variable "inband_epg" {
-  description = "Inband endpoint group name."
-  type        = string
-  default     = ""
-
-  validation {
-    condition     = can(regex("^[a-zA-Z0-9_.-]{0,64}$", var.inband_epg))
-    error_message = "Allowed characters: `a`-`z`, `A`-`Z`, `0`-`9`, `_`, `.`, `-`. Maximum characters: 64."
   }
 }

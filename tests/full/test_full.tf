@@ -14,11 +14,14 @@ terraform {
 module "main" {
   source = "../.."
 
-  name           = "VMW1"
-  access_mode    = "read-only"
-  delimiter      = "="
-  tag_collection = true
-  vlan_pool      = "VP1"
+  name                        = "VMW1"
+  access_mode                 = "read-only"
+  delimiter                   = "="
+  tag_collection              = true
+  vlan_pool                   = "VP1"
+  vswitch_cdp_policy          = "CDP1"
+  vswitch_lldp_policy         = "LLDP1"
+  vswitch_port_channel_policy = "PC1"
   vcenters = [{
     name              = "VC1"
     hostname_ip       = "1.1.1.1"
@@ -33,11 +36,6 @@ module "main" {
     username = "USER1"
     password = "PASSWORD1"
   }]
-  vswitch = {
-    cdp_policy          = "CDP1"
-    lldp_policy         = "LLDP1"
-    port_channel_policy = "PC1"
-  }
 }
 
 data "aci_rest" "vmmDomP" {

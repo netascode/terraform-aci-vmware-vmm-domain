@@ -13,13 +13,16 @@ Location in GUI:
 ```hcl
 module "aci_vmware_vmm_domain" {
   source  = "netascode/vmware-vmm-domain/aci"
-  version = ">= 0.0.1"
+  version = ">= 0.0.2"
 
-  name           = "VMW1"
-  access_mode    = "read-only"
-  delimiter      = "="
-  tag_collection = true
-  vlan_pool      = "VP1"
+  name                        = "VMW1"
+  access_mode                 = "read-only"
+  delimiter                   = "="
+  tag_collection              = true
+  vlan_pool                   = "VP1"
+  vswitch_cdp_policy          = "CDP1"
+  vswitch_lldp_policy         = "LLDP1"
+  vswitch_port_channel_policy = "PC1"
   vcenters = [{
     name              = "VC1"
     hostname_ip       = "1.1.1.1"
@@ -34,11 +37,6 @@ module "aci_vmware_vmm_domain" {
     username = "USER1"
     password = "PASSWORD1"
   }]
-  vswitch = {
-    cdp_policy          = "CDP1"
-    lldp_policy         = "LLDP1"
-    port_channel_policy = "PC1"
-  }
 }
 
 ```
@@ -65,10 +63,12 @@ module "aci_vmware_vmm_domain" {
 | <a name="input_delimiter"></a> [delimiter](#input\_delimiter) | Delimiter (vCenter Port Group). | `string` | `""` | no |
 | <a name="input_tag_collection"></a> [tag\_collection](#input\_tag\_collection) | Tag collection. | `bool` | `false` | no |
 | <a name="input_vlan_pool"></a> [vlan\_pool](#input\_vlan\_pool) | Vlan pool name. | `string` | n/a | yes |
+| <a name="input_vswitch_cdp_policy"></a> [vswitch\_cdp\_policy](#input\_vswitch\_cdp\_policy) | vSwitch CDP policy name. | `string` | `""` | no |
+| <a name="input_vswitch_lldp_policy"></a> [vswitch\_lldp\_policy](#input\_vswitch\_lldp\_policy) | vSwitch LLDP policy name. | `string` | `""` | no |
+| <a name="input_vswitch_port_channel_policy"></a> [vswitch\_port\_channel\_policy](#input\_vswitch\_port\_channel\_policy) | vSwitch port channel policy name. | `string` | `""` | no |
+| <a name="input_inband_epg"></a> [inband\_epg](#input\_inband\_epg) | Inband endpoint group name. | `string` | `""` | no |
 | <a name="input_vcenters"></a> [vcenters](#input\_vcenters) | List of vCenter hosts. Choices `dvs_version`: `unmanaged`, `5.1`, `5.5`, `6.0`, `6.5`, `6.6`. Default value `dvs_version`: `unmanaged`. Default value `statistics`: false. Default value `mgmt_epg`: `inb`. | <pre>list(object({<br>    name              = string<br>    hostname_ip       = string<br>    datacenter        = string<br>    credential_policy = optional(string)<br>    dvs_version       = optional(string)<br>    statistics        = optional(bool)<br>    mgmt_epg          = optional(string)<br>  }))</pre> | `[]` | no |
 | <a name="input_credential_policies"></a> [credential\_policies](#input\_credential\_policies) | List of vCenter credentials. | <pre>list(object({<br>    name     = string<br>    username = string<br>    password = string<br>  }))</pre> | `[]` | no |
-| <a name="input_vswitch"></a> [vswitch](#input\_vswitch) | vSwitch settings. | <pre>object({<br>    cdp_policy          = optional(string)<br>    lldp_policy         = optional(string)<br>    port_channel_policy = optional(string)<br>  })</pre> | `{}` | no |
-| <a name="input_inband_epg"></a> [inband\_epg](#input\_inband\_epg) | Inband endpoint group name. | `string` | `""` | no |
 
 ## Outputs
 
