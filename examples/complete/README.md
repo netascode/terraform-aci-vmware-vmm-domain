@@ -31,7 +31,7 @@ module "aci_vmware_vmm_domain" {
     credential_policy = "CP1"
     dvs_version       = "6.5"
     statistics        = true
-    mgmt_epg          = "oob"
+    mgmt_epg_type     = "oob"
   }]
   credential_policies = [{
     name     = "CP1"

@@ -30,7 +30,7 @@ module "aci_vmware_vmm_domain" {
     credential_policy = "CP1"
     dvs_version       = "6.5"
     statistics        = true
-    mgmt_epg          = "oob"
+    mgmt_epg_type     = "oob"
   }]
   credential_policies = [{
     name     = "CP1"
@@ -66,8 +66,7 @@ module "aci_vmware_vmm_domain" {
 | <a name="input_vswitch_cdp_policy"></a> [vswitch\_cdp\_policy](#input\_vswitch\_cdp\_policy) | vSwitch CDP policy name. | `string` | `""` | no |
 | <a name="input_vswitch_lldp_policy"></a> [vswitch\_lldp\_policy](#input\_vswitch\_lldp\_policy) | vSwitch LLDP policy name. | `string` | `""` | no |
 | <a name="input_vswitch_port_channel_policy"></a> [vswitch\_port\_channel\_policy](#input\_vswitch\_port\_channel\_policy) | vSwitch port channel policy name. | `string` | `""` | no |
-| <a name="input_inband_epg"></a> [inband\_epg](#input\_inband\_epg) | Inband endpoint group name. | `string` | `""` | no |
-| <a name="input_vcenters"></a> [vcenters](#input\_vcenters) | List of vCenter hosts. Choices `dvs_version`: `unmanaged`, `5.1`, `5.5`, `6.0`, `6.5`, `6.6`. Default value `dvs_version`: `unmanaged`. Default value `statistics`: false. Default value `mgmt_epg`: `inb`. | <pre>list(object({<br>    name              = string<br>    hostname_ip       = string<br>    datacenter        = string<br>    credential_policy = optional(string)<br>    dvs_version       = optional(string)<br>    statistics        = optional(bool)<br>    mgmt_epg          = optional(string)<br>  }))</pre> | `[]` | no |
+| <a name="input_vcenters"></a> [vcenters](#input\_vcenters) | List of vCenter hosts. Choices `dvs_version`: `unmanaged`, `5.1`, `5.5`, `6.0`, `6.5`, `6.6`. Default value `dvs_version`: `unmanaged`. Default value `statistics`: false. Allowed values `mgmt_epg_type`: `inb`, `oob`. Default value `mgmt_epg_type`: `inb`. | <pre>list(object({<br>    name              = string<br>    hostname_ip       = string<br>    datacenter        = string<br>    credential_policy = optional(string)<br>    dvs_version       = optional(string)<br>    statistics        = optional(bool)<br>    mgmt_epg_type     = optional(string)<br>    mgmt_epg_name     = optional(string)<br>  }))</pre> | `[]` | no |
 | <a name="input_credential_policies"></a> [credential\_policies](#input\_credential\_policies) | List of vCenter credentials. | <pre>list(object({<br>    name     = string<br>    username = string<br>    password = string<br>  }))</pre> | `[]` | no |
 
 ## Outputs

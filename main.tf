@@ -92,10 +92,10 @@ resource "aci_rest" "vmmRsAcc" {
 }
 
 resource "aci_rest" "vmmRsMgmtEPg" {
-  for_each   = { for vc in var.vcenters : vc.name => vc if lookup(vc, "mgmt_epg", "inb") == "inb" }
+  for_each   = { for vc in var.vcenters : vc.name => vc if lookup(vc, "mgmt_epg_type", "inb") == "inb" && vc.mgmt_epg_name != null }
   dn         = "${aci_rest.vmmCtrlrP[each.value.name].id}/rsmgmtEPg"
   class_name = "vmmRsMgmtEPg"
   content = {
-    tDn = "uni/tn-mgmt/mgmtp-default/inb-${var.inband_epg}"
+    tDn = "uni/tn-mgmt/mgmtp-default/inb-${each.value.mgmt_epg_name}"
   }
 }

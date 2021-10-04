@@ -79,19 +79,8 @@ variable "vswitch_port_channel_policy" {
   }
 }
 
-variable "inband_epg" {
-  description = "Inband endpoint group name."
-  type        = string
-  default     = ""
-
-  validation {
-    condition     = can(regex("^[a-zA-Z0-9_.-]{0,64}$", var.inband_epg))
-    error_message = "Allowed characters: `a`-`z`, `A`-`Z`, `0`-`9`, `_`, `.`, `-`. Maximum characters: 64."
-  }
-}
-
 variable "vcenters" {
-  description = "List of vCenter hosts. Choices `dvs_version`: `unmanaged`, `5.1`, `5.5`, `6.0`, `6.5`, `6.6`. Default value `dvs_version`: `unmanaged`. Default value `statistics`: false. Default value `mgmt_epg`: `inb`."
+  description = "List of vCenter hosts. Choices `dvs_version`: `unmanaged`, `5.1`, `5.5`, `6.0`, `6.5`, `6.6`. Default value `dvs_version`: `unmanaged`. Default value `statistics`: false. Allowed values `mgmt_epg_type`: `inb`, `oob`. Default value `mgmt_epg_type`: `inb`."
   type = list(object({
     name              = string
     hostname_ip       = string
@@ -99,7 +88,8 @@ variable "vcenters" {
     credential_policy = optional(string)
     dvs_version       = optional(string)
     statistics        = optional(bool)
-    mgmt_epg          = optional(string)
+    mgmt_epg_type     = optional(string)
+    mgmt_epg_name     = optional(string)
   }))
   default = []
 
@@ -140,9 +130,16 @@ variable "vcenters" {
 
   validation {
     condition = alltrue([
-      for v in var.vcenters : v.mgmt_epg == null || try(contains(["inb", "oob"], v.mgmt_epg), false)
+      for v in var.vcenters : v.mgmt_epg_type == null || try(contains(["inb", "oob"], v.mgmt_epg_type), false)
     ])
-    error_message = "`mgmt_epg`: Allowed values are `inb` or `oob`."
+    error_message = "`mgmt_epg_type`: Allowed values are `inb` or `oob`."
+  }
+
+  validation {
+    condition = alltrue([
+      for v in var.vcenters : v.mgmt_epg_name == null || can(regex("^[a-zA-Z0-9_.-]{0,64}$", v.mgmt_epg_name))
+    ])
+    error_message = "Allowed characters `mgmt_epg_name`: `a`-`z`, `A`-`Z`, `0`-`9`, `_`, `.`, `-`. Maximum characters: 64."
   }
 }
 

@@ -1,6 +1,8 @@
-## 0.0.2 (unreleased)
+## 0.0.2
 
-- BREAKING CHANGE: Refactor vswitch variables
+- BREAKING CHANGE: refactor vswitch variables
+- BREAKING CHANGE: rename mgmt_epg variable to mgmt_epg_type
+- BREAKING CHANGE: remove inband_epg variable and add mgmt_epg_name variable
 
 ## 0.0.1
 
