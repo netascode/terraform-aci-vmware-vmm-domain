@@ -5,8 +5,8 @@ terraform {
     }
 
     aci = {
-      source  = "netascode/aci"
-      version = ">=0.2.0"
+      source  = "CiscoDevNet/aci"
+      version = ">=2.0.0"
     }
   }
 }
@@ -38,7 +38,7 @@ module "main" {
   }]
 }
 
-data "aci_rest" "vmmDomP" {
+data "aci_rest_managed" "vmmDomP" {
   dn = "uni/vmmp-VMware/dom-${module.main.name}"
 
   depends_on = [module.main]
@@ -49,37 +49,37 @@ resource "test_assertions" "vmmDomP" {
 
   equal "name" {
     description = "name"
-    got         = data.aci_rest.vmmDomP.content.name
+    got         = data.aci_rest_managed.vmmDomP.content.name
     want        = module.main.name
   }
 
   equal "accessMode" {
     description = "accessMode"
-    got         = data.aci_rest.vmmDomP.content.accessMode
+    got         = data.aci_rest_managed.vmmDomP.content.accessMode
     want        = "read-only"
   }
 
   equal "delimiter" {
     description = "delimiter"
-    got         = data.aci_rest.vmmDomP.content.delimiter
+    got         = data.aci_rest_managed.vmmDomP.content.delimiter
     want        = "="
   }
 
   equal "enableTag" {
     description = "enableTag"
-    got         = data.aci_rest.vmmDomP.content.enableTag
+    got         = data.aci_rest_managed.vmmDomP.content.enableTag
     want        = "yes"
   }
 
   equal "mode" {
     description = "mode"
-    got         = data.aci_rest.vmmDomP.content.mode
+    got         = data.aci_rest_managed.vmmDomP.content.mode
     want        = "default"
   }
 }
 
-data "aci_rest" "infraRsVlanNs" {
-  dn = "${data.aci_rest.vmmDomP.id}/rsvlanNs"
+data "aci_rest_managed" "infraRsVlanNs" {
+  dn = "${data.aci_rest_managed.vmmDomP.id}/rsvlanNs"
 
   depends_on = [module.main]
 }
@@ -89,13 +89,13 @@ resource "test_assertions" "infraRsVlanNs" {
 
   equal "tDn" {
     description = "tDn"
-    got         = data.aci_rest.infraRsVlanNs.content.tDn
+    got         = data.aci_rest_managed.infraRsVlanNs.content.tDn
     want        = "uni/infra/vlanns-[VP1]-dynamic"
   }
 }
 
-data "aci_rest" "vmmRsVswitchOverrideLldpIfPol" {
-  dn = "${data.aci_rest.vmmDomP.id}/vswitchpolcont/rsvswitchOverrideLldpIfPol"
+data "aci_rest_managed" "vmmRsVswitchOverrideLldpIfPol" {
+  dn = "${data.aci_rest_managed.vmmDomP.id}/vswitchpolcont/rsvswitchOverrideLldpIfPol"
 
   depends_on = [module.main]
 }
@@ -105,13 +105,13 @@ resource "test_assertions" "vmmRsVswitchOverrideLldpIfPol" {
 
   equal "tDn" {
     description = "tDn"
-    got         = data.aci_rest.vmmRsVswitchOverrideLldpIfPol.content.tDn
+    got         = data.aci_rest_managed.vmmRsVswitchOverrideLldpIfPol.content.tDn
     want        = "uni/infra/lldpIfP-LLDP1"
   }
 }
 
-data "aci_rest" "vmmRsVswitchOverrideCdpIfPol" {
-  dn = "${data.aci_rest.vmmDomP.id}/vswitchpolcont/rsvswitchOverrideCdpIfPol"
+data "aci_rest_managed" "vmmRsVswitchOverrideCdpIfPol" {
+  dn = "${data.aci_rest_managed.vmmDomP.id}/vswitchpolcont/rsvswitchOverrideCdpIfPol"
 
   depends_on = [module.main]
 }
@@ -121,13 +121,13 @@ resource "test_assertions" "vmmRsVswitchOverrideCdpIfPol" {
 
   equal "tDn" {
     description = "tDn"
-    got         = data.aci_rest.vmmRsVswitchOverrideCdpIfPol.content.tDn
+    got         = data.aci_rest_managed.vmmRsVswitchOverrideCdpIfPol.content.tDn
     want        = "uni/infra/cdpIfP-CDP1"
   }
 }
 
-data "aci_rest" "vmmRsVswitchOverrideLacpPol" {
-  dn = "${data.aci_rest.vmmDomP.id}/vswitchpolcont/rsvswitchOverrideLacpPol"
+data "aci_rest_managed" "vmmRsVswitchOverrideLacpPol" {
+  dn = "${data.aci_rest_managed.vmmDomP.id}/vswitchpolcont/rsvswitchOverrideLacpPol"
 
   depends_on = [module.main]
 }
@@ -137,13 +137,13 @@ resource "test_assertions" "vmmRsVswitchOverrideLacpPol" {
 
   equal "tDn" {
     description = "tDn"
-    got         = data.aci_rest.vmmRsVswitchOverrideLacpPol.content.tDn
+    got         = data.aci_rest_managed.vmmRsVswitchOverrideLacpPol.content.tDn
     want        = "uni/infra/lacplagp-PC1"
   }
 }
 
-data "aci_rest" "vmmCtrlrP" {
-  dn = "${data.aci_rest.vmmDomP.id}/ctrlr-VC1"
+data "aci_rest_managed" "vmmCtrlrP" {
+  dn = "${data.aci_rest_managed.vmmDomP.id}/ctrlr-VC1"
 
   depends_on = [module.main]
 }
@@ -153,61 +153,61 @@ resource "test_assertions" "vmmCtrlrP" {
 
   equal "dvsVersion" {
     description = "dvsVersion"
-    got         = data.aci_rest.vmmCtrlrP.content.dvsVersion
+    got         = data.aci_rest_managed.vmmCtrlrP.content.dvsVersion
     want        = "6.5"
   }
 
   equal "hostOrIp" {
     description = "hostOrIp"
-    got         = data.aci_rest.vmmCtrlrP.content.hostOrIp
+    got         = data.aci_rest_managed.vmmCtrlrP.content.hostOrIp
     want        = "1.1.1.1"
   }
 
   equal "inventoryTrigSt" {
     description = "inventoryTrigSt"
-    got         = data.aci_rest.vmmCtrlrP.content.inventoryTrigSt
+    got         = data.aci_rest_managed.vmmCtrlrP.content.inventoryTrigSt
     want        = "untriggered"
   }
 
   equal "mode" {
     description = "mode"
-    got         = data.aci_rest.vmmCtrlrP.content.mode
+    got         = data.aci_rest_managed.vmmCtrlrP.content.mode
     want        = "default"
   }
 
   equal "name" {
     description = "name"
-    got         = data.aci_rest.vmmCtrlrP.content.name
+    got         = data.aci_rest_managed.vmmCtrlrP.content.name
     want        = "VC1"
   }
 
   equal "port" {
     description = "port"
-    got         = data.aci_rest.vmmCtrlrP.content.port
+    got         = data.aci_rest_managed.vmmCtrlrP.content.port
     want        = "0"
   }
 
   equal "rootContName" {
     description = "rootContName"
-    got         = data.aci_rest.vmmCtrlrP.content.rootContName
+    got         = data.aci_rest_managed.vmmCtrlrP.content.rootContName
     want        = "DC"
   }
 
   equal "scope" {
     description = "scope"
-    got         = data.aci_rest.vmmCtrlrP.content.scope
+    got         = data.aci_rest_managed.vmmCtrlrP.content.scope
     want        = "vm"
   }
 
   equal "statsMode" {
     description = "statsMode"
-    got         = data.aci_rest.vmmCtrlrP.content.statsMode
+    got         = data.aci_rest_managed.vmmCtrlrP.content.statsMode
     want        = "enabled"
   }
 }
 
-data "aci_rest" "vmmUsrAccP" {
-  dn = "${data.aci_rest.vmmDomP.id}/usracc-CP1"
+data "aci_rest_managed" "vmmUsrAccP" {
+  dn = "${data.aci_rest_managed.vmmDomP.id}/usracc-CP1"
 
   depends_on = [module.main]
 }
@@ -217,19 +217,19 @@ resource "test_assertions" "vmmUsrAccP" {
 
   equal "name" {
     description = "name"
-    got         = data.aci_rest.vmmUsrAccP.content.name
+    got         = data.aci_rest_managed.vmmUsrAccP.content.name
     want        = "CP1"
   }
 
   equal "usr" {
     description = "usr"
-    got         = data.aci_rest.vmmUsrAccP.content.usr
+    got         = data.aci_rest_managed.vmmUsrAccP.content.usr
     want        = "USER1"
   }
 }
 
-data "aci_rest" "vmmRsAcc" {
-  dn = "${data.aci_rest.vmmCtrlrP.id}/rsacc"
+data "aci_rest_managed" "vmmRsAcc" {
+  dn = "${data.aci_rest_managed.vmmCtrlrP.id}/rsacc"
 
   depends_on = [module.main]
 }
@@ -239,7 +239,7 @@ resource "test_assertions" "vmmRsAcc" {
 
   equal "tDn" {
     description = "tDn"
-    got         = data.aci_rest.vmmRsAcc.content.tDn
+    got         = data.aci_rest_managed.vmmRsAcc.content.tDn
     want        = "uni/vmmp-VMware/dom-VMW1/usracc-CP1"
   }
 }

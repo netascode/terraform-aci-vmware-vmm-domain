@@ -1,4 +1,4 @@
-resource "aci_rest" "vmmDomP" {
+resource "aci_rest_managed" "vmmDomP" {
   dn         = "uni/vmmp-VMware/dom-${var.name}"
   class_name = "vmmDomP"
   content = {
@@ -10,49 +10,49 @@ resource "aci_rest" "vmmDomP" {
   }
 }
 
-resource "aci_rest" "infraRsVlanNs" {
-  dn         = "${aci_rest.vmmDomP.dn}/rsvlanNs"
+resource "aci_rest_managed" "infraRsVlanNs" {
+  dn         = "${aci_rest_managed.vmmDomP.dn}/rsvlanNs"
   class_name = "infraRsVlanNs"
   content = {
     tDn = "uni/infra/vlanns-[${var.vlan_pool}]-dynamic"
   }
 }
 
-resource "aci_rest" "vmmVSwitchPolicyCont" {
-  dn         = "${aci_rest.vmmDomP.dn}/vswitchpolcont"
+resource "aci_rest_managed" "vmmVSwitchPolicyCont" {
+  dn         = "${aci_rest_managed.vmmDomP.dn}/vswitchpolcont"
   class_name = "vmmVSwitchPolicyCont"
 }
 
-resource "aci_rest" "vmmRsVswitchOverrideLldpIfPol" {
+resource "aci_rest_managed" "vmmRsVswitchOverrideLldpIfPol" {
   count      = var.vswitch_lldp_policy != "" ? 1 : 0
-  dn         = "${aci_rest.vmmVSwitchPolicyCont.dn}/rsvswitchOverrideLldpIfPol"
+  dn         = "${aci_rest_managed.vmmVSwitchPolicyCont.dn}/rsvswitchOverrideLldpIfPol"
   class_name = "vmmRsVswitchOverrideLldpIfPol"
   content = {
     tDn = "uni/infra/lldpIfP-${var.vswitch_lldp_policy}"
   }
 }
 
-resource "aci_rest" "vmmRsVswitchOverrideCdpIfPol" {
+resource "aci_rest_managed" "vmmRsVswitchOverrideCdpIfPol" {
   count      = var.vswitch_cdp_policy != "" ? 1 : 0
-  dn         = "${aci_rest.vmmVSwitchPolicyCont.dn}/rsvswitchOverrideCdpIfPol"
+  dn         = "${aci_rest_managed.vmmVSwitchPolicyCont.dn}/rsvswitchOverrideCdpIfPol"
   class_name = "vmmRsVswitchOverrideCdpIfPol"
   content = {
     tDn = "uni/infra/cdpIfP-${var.vswitch_cdp_policy}"
   }
 }
 
-resource "aci_rest" "vmmRsVswitchOverrideLacpPol" {
+resource "aci_rest_managed" "vmmRsVswitchOverrideLacpPol" {
   count      = var.vswitch_port_channel_policy != "" ? 1 : 0
-  dn         = "${aci_rest.vmmVSwitchPolicyCont.dn}/rsvswitchOverrideLacpPol"
+  dn         = "${aci_rest_managed.vmmVSwitchPolicyCont.dn}/rsvswitchOverrideLacpPol"
   class_name = "vmmRsVswitchOverrideLacpPol"
   content = {
     tDn = "uni/infra/lacplagp-${var.vswitch_port_channel_policy}"
   }
 }
 
-resource "aci_rest" "vmmCtrlrP" {
+resource "aci_rest_managed" "vmmCtrlrP" {
   for_each   = { for vc in var.vcenters : vc.name => vc }
-  dn         = "${aci_rest.vmmDomP.dn}/ctrlr-${each.value.name}"
+  dn         = "${aci_rest_managed.vmmDomP.dn}/ctrlr-${each.value.name}"
   class_name = "vmmCtrlrP"
   content = {
     dvsVersion      = each.value.dvs_version != null ? each.value.dvs_version : "unmanaged"
@@ -67,9 +67,9 @@ resource "aci_rest" "vmmCtrlrP" {
   }
 }
 
-resource "aci_rest" "vmmUsrAccP" {
+resource "aci_rest_managed" "vmmUsrAccP" {
   for_each   = { for cred in var.credential_policies : cred.name => cred }
-  dn         = "${aci_rest.vmmDomP.dn}/usracc-${each.value.name}"
+  dn         = "${aci_rest_managed.vmmDomP.dn}/usracc-${each.value.name}"
   class_name = "vmmUsrAccP"
   content = {
     name = each.value.name
@@ -82,18 +82,18 @@ resource "aci_rest" "vmmUsrAccP" {
   }
 }
 
-resource "aci_rest" "vmmRsAcc" {
+resource "aci_rest_managed" "vmmRsAcc" {
   for_each   = { for vc in var.vcenters : vc.name => vc if lookup(vc, "credential_policy", null) != null }
-  dn         = "${aci_rest.vmmCtrlrP[each.value.name].dn}/rsacc"
+  dn         = "${aci_rest_managed.vmmCtrlrP[each.value.name].dn}/rsacc"
   class_name = "vmmRsAcc"
   content = {
     tDn = "uni/vmmp-VMware/dom-${var.name}/usracc-${each.value.credential_policy}"
   }
 }
 
-resource "aci_rest" "vmmRsMgmtEPg" {
+resource "aci_rest_managed" "vmmRsMgmtEPg" {
   for_each   = { for vc in var.vcenters : vc.name => vc if lookup(vc, "mgmt_epg_type", "inb") == "inb" && vc.mgmt_epg_name != null }
-  dn         = "${aci_rest.vmmCtrlrP[each.value.name].dn}/rsmgmtEPg"
+  dn         = "${aci_rest_managed.vmmCtrlrP[each.value.name].dn}/rsmgmtEPg"
   class_name = "vmmRsMgmtEPg"
   content = {
     tDn = "uni/tn-mgmt/mgmtp-default/inb-${each.value.mgmt_epg_name}"

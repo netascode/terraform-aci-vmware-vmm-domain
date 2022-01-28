@@ -14,7 +14,7 @@ Note that this example will create resources. Resources can be destroyed with `t
 ```hcl
 module "aci_vmware_vmm_domain" {
   source  = "netascode/vmware-vmm-domain/aci"
-  version = ">= 0.0.2"
+  version = ">= 0.1.0"
 
   name                        = "VMW1"
   access_mode                 = "read-only"
@@ -39,6 +39,5 @@ module "aci_vmware_vmm_domain" {
     password = "PASSWORD1"
   }]
 }
-
 ```
 <!-- END_TF_DOCS -->
