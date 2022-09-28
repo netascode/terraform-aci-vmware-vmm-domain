@@ -86,9 +86,9 @@ variable "vcenters" {
     hostname_ip       = string
     datacenter        = string
     credential_policy = optional(string)
-    dvs_version       = optional(string)
-    statistics        = optional(bool)
-    mgmt_epg_type     = optional(string)
+    dvs_version       = optional(string, "unmanaged")
+    statistics        = optional(bool, false)
+    mgmt_epg_type     = optional(string, "inb")
     mgmt_epg_name     = optional(string)
   }))
   default = []

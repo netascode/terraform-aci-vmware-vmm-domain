@@ -55,13 +55,13 @@ resource "aci_rest_managed" "vmmCtrlrP" {
   dn         = "${aci_rest_managed.vmmDomP.dn}/ctrlr-${each.value.name}"
   class_name = "vmmCtrlrP"
   content = {
-    dvsVersion      = each.value.dvs_version != null ? each.value.dvs_version : "unmanaged"
+    dvsVersion      = each.value.dvs_version
     hostOrIp        = each.value.hostname_ip
     inventoryTrigSt = "untriggered"
     mode            = "default"
     name            = each.value.name
     port            = "0"
-    rootContName    = each.value.datacenter != null ? each.value.datacenter : ""
+    rootContName    = each.value.datacenter
     scope           = "vm"
     statsMode       = each.value.statistics == true ? "enabled" : "disabled"
   }
@@ -83,7 +83,7 @@ resource "aci_rest_managed" "vmmUsrAccP" {
 }
 
 resource "aci_rest_managed" "vmmRsAcc" {
-  for_each   = { for vc in var.vcenters : vc.name => vc if lookup(vc, "credential_policy", null) != null }
+  for_each   = { for vc in var.vcenters : vc.name => vc if vc.credential_policy != null }
   dn         = "${aci_rest_managed.vmmCtrlrP[each.value.name].dn}/rsacc"
   class_name = "vmmRsAcc"
   content = {

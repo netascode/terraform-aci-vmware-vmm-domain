@@ -13,7 +13,7 @@ Location in GUI:
 ```hcl
 module "aci_vmware_vmm_domain" {
   source  = "netascode/vmware-vmm-domain/aci"
-  version = ">= 0.1.0"
+  version = ">= 0.2.0"
 
   name                        = "VMW1"
   access_mode                 = "read-only"
@@ -44,7 +44,7 @@ module "aci_vmware_vmm_domain" {
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0.0 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0 |
 | <a name="requirement_aci"></a> [aci](#requirement\_aci) | >= 2.0.0 |
 
 ## Providers
@@ -65,7 +65,7 @@ module "aci_vmware_vmm_domain" {
 | <a name="input_vswitch_cdp_policy"></a> [vswitch\_cdp\_policy](#input\_vswitch\_cdp\_policy) | vSwitch CDP policy name. | `string` | `""` | no |
 | <a name="input_vswitch_lldp_policy"></a> [vswitch\_lldp\_policy](#input\_vswitch\_lldp\_policy) | vSwitch LLDP policy name. | `string` | `""` | no |
 | <a name="input_vswitch_port_channel_policy"></a> [vswitch\_port\_channel\_policy](#input\_vswitch\_port\_channel\_policy) | vSwitch port channel policy name. | `string` | `""` | no |
-| <a name="input_vcenters"></a> [vcenters](#input\_vcenters) | List of vCenter hosts. Choices `dvs_version`: `unmanaged`, `5.1`, `5.5`, `6.0`, `6.5`, `6.6`. Default value `dvs_version`: `unmanaged`. Default value `statistics`: false. Allowed values `mgmt_epg_type`: `inb`, `oob`. Default value `mgmt_epg_type`: `inb`. | <pre>list(object({<br>    name              = string<br>    hostname_ip       = string<br>    datacenter        = string<br>    credential_policy = optional(string)<br>    dvs_version       = optional(string)<br>    statistics        = optional(bool)<br>    mgmt_epg_type     = optional(string)<br>    mgmt_epg_name     = optional(string)<br>  }))</pre> | `[]` | no |
+| <a name="input_vcenters"></a> [vcenters](#input\_vcenters) | List of vCenter hosts. Choices `dvs_version`: `unmanaged`, `5.1`, `5.5`, `6.0`, `6.5`, `6.6`. Default value `dvs_version`: `unmanaged`. Default value `statistics`: false. Allowed values `mgmt_epg_type`: `inb`, `oob`. Default value `mgmt_epg_type`: `inb`. | <pre>list(object({<br>    name              = string<br>    hostname_ip       = string<br>    datacenter        = string<br>    credential_policy = optional(string)<br>    dvs_version       = optional(string, "unmanaged")<br>    statistics        = optional(bool, false)<br>    mgmt_epg_type     = optional(string, "inb")<br>    mgmt_epg_name     = optional(string)<br>  }))</pre> | `[]` | no |
 | <a name="input_credential_policies"></a> [credential\_policies](#input\_credential\_policies) | List of vCenter credentials. | <pre>list(object({<br>    name     = string<br>    username = string<br>    password = string<br>  }))</pre> | `[]` | no |
 
 ## Outputs
