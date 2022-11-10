@@ -35,10 +35,11 @@ module "main" {
   }]
   credential_policies = [{
     name     = "CP1"
-    username = "USER1"
+    username = "domain\\USER1"
     password = "PASSWORD1"
   }]
 }
+
 
 data "aci_rest_managed" "vmmDomP" {
   dn = "uni/vmmp-VMware/dom-${module.main.name}"
@@ -226,7 +227,7 @@ resource "test_assertions" "vmmUsrAccP" {
   equal "usr" {
     description = "usr"
     got         = data.aci_rest_managed.vmmUsrAccP.content.usr
-    want        = "USER1"
+    want        = "domain\\USER1"
   }
 }
 
