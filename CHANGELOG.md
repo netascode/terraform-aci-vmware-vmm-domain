@@ -1,4 +1,4 @@
-## 0.2.1 (unreleased)
+## 0.2.1
 
 - Fix regex validation of vCenter username to allow for `domain\username` format
 
