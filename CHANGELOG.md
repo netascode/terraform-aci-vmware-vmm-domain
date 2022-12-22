@@ -1,3 +1,7 @@
+## 0.2.1 (unreleased)
+
+- Fix regex validation of vCenter username to allow for `domain\username` format
+
 ## 0.2.0
 
 - Update to support new Terraform 1.3 `optional` syntax
