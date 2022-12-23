@@ -107,7 +107,7 @@ variable "vswitch_enhanced_lags" {
     condition = alltrue([
       for elag in var.vswitch_enhanced_lags : contains(["active", "passive"], elag.mode)
     ])
-    error_message = "Allowed values for `more`: `active`, `passive`."
+    error_message = "Allowed values for `mode`: `active`, `passive`."
   }
 
   validation {
