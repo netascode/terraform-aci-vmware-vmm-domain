@@ -50,6 +50,18 @@ resource "aci_rest_managed" "vmmRsVswitchOverrideLacpPol" {
   }
 }
 
+resource "aci_rest_managed" "lacpEnhancedLagPol" {
+  for_each   = { for elag in var.vswitch_enhanced_lags : elag.name => elag }
+  dn         = "${aci_rest_managed.vmmVSwitchPolicyCont.dn}/enlacplagp-${each.value.name}"
+  class_name = "lacpEnhancedLagPol"
+  content = {
+    name     = each.value.name
+    lbmode   = each.value.lb_mode
+    mode     = each.value.mode
+    numLinks = each.value.num_links
+  }
+}
+
 resource "aci_rest_managed" "vmmCtrlrP" {
   for_each   = { for vc in var.vcenters : vc.name => vc }
   dn         = "${aci_rest_managed.vmmDomP.dn}/ctrlr-${each.value.name}"
@@ -97,5 +109,25 @@ resource "aci_rest_managed" "vmmRsMgmtEPg" {
   class_name = "vmmRsMgmtEPg"
   content = {
     tDn = "uni/tn-mgmt/mgmtp-default/inb-${each.value.mgmt_epg_name}"
+  }
+}
+
+
+resource "aci_rest_managed" "vmmUplinkPCont" {
+  count      = length(var.uplinks) == 0 ? 0 : 1
+  dn         = "${aci_rest_managed.vmmDomP.dn}/uplinkpcont"
+  class_name = "vmmUplinkPCont"
+  content = {
+    numOfUplinks = tostring(length(var.uplinks))
+  }
+}
+
+resource "aci_rest_managed" "vmmUplinkP" {
+  for_each   = { for uplink in var.uplinks : uplink.id => uplink }
+  dn         = "${aci_rest_managed.vmmUplinkPCont[0].dn}/uplinkp-${each.value.id}"
+  class_name = "vmmUplinkP"
+  content = {
+    uplinkId   = each.value.id
+    uplinkName = each.value.name
   }
 }

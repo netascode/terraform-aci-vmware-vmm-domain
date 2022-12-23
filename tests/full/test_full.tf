@@ -24,6 +24,14 @@ module "main" {
   vswitch_cdp_policy          = "CDP1"
   vswitch_lldp_policy         = "LLDP1"
   vswitch_port_channel_policy = "PC1"
+  vswitch_enhanced_lags = [
+    {
+      name      = "ELAG1"
+      mode      = "passive"
+      lb_mode   = "dst-ip-l4port"
+      num_links = 2
+    }
+  ]
   vcenters = [{
     name              = "VC1"
     hostname_ip       = "1.1.1.1"
@@ -38,6 +46,12 @@ module "main" {
     username = "domain\\USER1"
     password = "PASSWORD1"
   }]
+  uplinks = [
+    {
+      id   = 10
+      name = "UL10"
+    }
+  ]
 }
 
 
@@ -145,6 +159,40 @@ resource "test_assertions" "vmmRsVswitchOverrideLacpPol" {
   }
 }
 
+data "aci_rest_managed" "lacpEnhancedLagPol" {
+  dn = "${data.aci_rest_managed.vmmDomP.id}/vswitchpolcont/enlacplagp-ELAG1"
+
+  depends_on = [module.main]
+}
+
+resource "test_assertions" "lacpEnhancedLagPol" {
+  component = "lacpEnhancedLagPol"
+
+  equal "name" {
+    description = "name"
+    got         = data.aci_rest_managed.lacpEnhancedLagPol.content.name
+    want        = "ELAG1"
+  }
+
+  equal "lbmode" {
+    description = "lbmode"
+    got         = data.aci_rest_managed.lacpEnhancedLagPol.content.lbmode
+    want        = "dst-ip-l4port"
+  }
+
+  equal "mode" {
+    description = "mode"
+    got         = data.aci_rest_managed.lacpEnhancedLagPol.content.mode
+    want        = "passive"
+  }
+
+  equal "numLinks" {
+    description = "numLinks"
+    got         = data.aci_rest_managed.lacpEnhancedLagPol.content.numLinks
+    want        = "2"
+  }
+}
+
 data "aci_rest_managed" "vmmCtrlrP" {
   dn = "${data.aci_rest_managed.vmmDomP.id}/ctrlr-VC1"
 
@@ -244,5 +292,44 @@ resource "test_assertions" "vmmRsAcc" {
     description = "tDn"
     got         = data.aci_rest_managed.vmmRsAcc.content.tDn
     want        = "uni/vmmp-VMware/dom-VMW1/usracc-CP1"
+  }
+}
+
+
+data "aci_rest_managed" "vmmUplinkPCont" {
+  dn = "${data.aci_rest_managed.vmmDomP.id}/uplinkpcont"
+
+  depends_on = [module.main]
+}
+
+resource "test_assertions" "vmmUplinkPCont" {
+  component = "vmmUplinkPCont"
+
+  equal "numOfUplinks" {
+    description = "numOfUplinks"
+    got         = data.aci_rest_managed.vmmUplinkPCont.content.numOfUplinks
+    want        = "1"
+  }
+}
+
+data "aci_rest_managed" "vmmUplinkP" {
+  dn = "${data.aci_rest_managed.vmmUplinkPCont.id}/uplinkp-10"
+
+  depends_on = [module.main]
+}
+
+resource "test_assertions" "vmmUplinkP" {
+  component = "vmmUplinkP"
+
+  equal "uplinkId" {
+    description = "uplinkId"
+    got         = data.aci_rest_managed.vmmUplinkP.content.uplinkId
+    want        = "10"
+  }
+
+  equal "uplinkName" {
+    description = "uplinkName"
+    got         = data.aci_rest_managed.vmmUplinkP.content.uplinkName
+    want        = "UL10"
   }
 }

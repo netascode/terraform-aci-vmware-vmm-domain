@@ -79,6 +79,45 @@ variable "vswitch_port_channel_policy" {
   }
 }
 
+variable "vswitch_enhanced_lags" {
+  description = "vSwitch enhanced lags. Allowed values for `lb_mode`: `dst-ip`, `dst-ip-l4port`, `dst-ip-vlan`, `dst-ip-l4port-vlan`, `dst-mac`, `dst-l4port`, `src-ip`, `src-ip-l4port`, `src-ip-vlan`, `src-ip-l4port-vlan`, `src-mac`, `src-l4port`, `src-dst-ip`, `src-dst-ip-l4port`, `src-dst-ip-vlan`, `src-dst-ip-l4port-vlan`, `src-dst-mac`, `src-dst-l4port`, `src-port-id` or `vlan`. Default value: `src-dst-ip`. Allowed values for `mode`: `active` or `passive`. Defautl value: `active`. Allowed range for `num_links`: 2-8."
+  type = list(object({
+    name      = string
+    lb_mode   = optional(string, "src-dst-ip")
+    mode      = optional(string, "active")
+    num_links = optional(number, 2)
+  }))
+  default = []
+
+  validation {
+    condition = alltrue([
+      for elag in var.vswitch_enhanced_lags : can(regex("^[a-zA-Z0-9_.-]{0,64}$", elag.name))
+    ])
+    error_message = "Allowed characters `name`: `a`-`z`, `A`-`Z`, `0`-`9`, `_`, `.`, `-`. Maximum characters: 64."
+  }
+
+  validation {
+    condition = alltrue([
+      for elag in var.vswitch_enhanced_lags : contains(["dst-ip", "dst-ip-l4port", "dst-ip-vlan", "dst-ip-l4port-vlan", "dst-mac", "dst-l4port", "src-ip", "src-ip-l4port", "src-ip-vlan", "src-ip-l4port-vlan", "src-mac", "src-l4port", "src-dst-ip", "src-dst-ip-l4port", "src-dst-ip-vlan", "src-dst-ip-l4port-vlan", "src-dst-mac", "src-dst-l4port", "src-port-id", "vlan"], elag.lb_mode)
+    ])
+    error_message = "Allowed values for `lb_mode`: `dst-ip`, `dst-ip-l4port`, `dst-ip-vlan`, `dst-ip-l4port-vlan`, `dst-mac`, `dst-l4port`, `src-ip`, `src-ip-l4port`, `src-ip-vlan`, `src-ip-l4port-vlan`, `src-mac`, `src-l4port`, `src-dst-ip`, `src-dst-ip-l4port`, `src-dst-ip-vlan`, `src-dst-ip-l4port-vlan`, `src-dst-mac`, `src-dst-l4port`, `src-port-id` or `vlan`."
+  }
+
+  validation {
+    condition = alltrue([
+      for elag in var.vswitch_enhanced_lags : contains(["active", "passive"], elag.mode)
+    ])
+    error_message = "Allowed values for `more`: `active`, `passive`."
+  }
+
+  validation {
+    condition = alltrue([
+      for elag in var.vswitch_enhanced_lags : elag.num_links >= 2 && elag.num_links <= 8
+    ])
+    error_message = "Allowed range for `num_links`: 2-8."
+  }
+}
+
 variable "vcenters" {
   description = "List of vCenter hosts. Choices `dvs_version`: `unmanaged`, `5.1`, `5.5`, `6.0`, `6.5`, `6.6`. Default value `dvs_version`: `unmanaged`. Default value `statistics`: false. Allowed values `mgmt_epg_type`: `inb`, `oob`. Default value `mgmt_epg_type`: `inb`."
   type = list(object({
@@ -164,5 +203,29 @@ variable "credential_policies" {
       for c in var.credential_policies : can(regex("^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]{1,128}$", c.username))
     ])
     error_message = "Allowed characters `username`: `a`-`z`, `A`-`Z`, `0`-`9`, `\\`, `!`, `#`, `$`, `%`, `(`, `)`, `*`, `,`, `-`, `.`, `/`, `:`, `;`, `@`, `_`, `{`, `|`, `}`, `~`, `?`, `&`, `+`. Maximum characters: 128."
+  }
+}
+
+
+variable "uplinks" {
+  description = "Lis of vSwitch uplinks. Allowed range for `id`: 1-32"
+  type = list(object({
+    id   = number
+    name = string
+  }))
+  default = []
+
+  validation {
+    condition = alltrue([
+      for uplink in var.uplinks : can(regex("^[a-zA-Z0-9_.-]{0,64}$", uplink.name))
+    ])
+    error_message = "Allowed characters `name`: `a`-`z`, `A`-`Z`, `0`-`9`, `_`, `.`, `-`. Maximum characters: 64."
+  }
+
+  validation {
+    condition = alltrue([
+      for uplink in var.uplinks : can(regex("^[a-zA-Z0-9_.-]{0,64}$", uplink.id))
+    ])
+    error_message = "Allowed range for `id`: 1-32."
   }
 }
