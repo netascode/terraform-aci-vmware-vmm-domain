@@ -1,3 +1,8 @@
+## 0.2.2 (unreleased)
+
+- Add enhanced LAG configuration
+- Add uplink configuration
+
 ## 0.2.1
 
 - Fix regex validation of vCenter username to allow for `domain\username` format

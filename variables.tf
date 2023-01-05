@@ -208,7 +208,7 @@ variable "credential_policies" {
 
 
 variable "uplinks" {
-  description = "Lis of vSwitch uplinks. Allowed range for `id`: 1-32"
+  description = "List of vSwitch uplinks. Allowed range for `id`: 1-32."
   type = list(object({
     id   = number
     name = string
