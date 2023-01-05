@@ -23,6 +23,16 @@ module "aci_vmware_vmm_domain" {
   vswitch_cdp_policy          = "CDP1"
   vswitch_lldp_policy         = "LLDP1"
   vswitch_port_channel_policy = "PC1"
+  vswitch_enhanced_lags = [
+    {
+      name    = "ELAG1"
+      mode    = "passive"
+      lb_mode = "dst-ip-l4port"
+    },
+    {
+      name = "ELAG2"
+    }
+  ]
   vcenters = [{
     name              = "VC1"
     hostname_ip       = "1.1.1.1"
@@ -37,6 +47,16 @@ module "aci_vmware_vmm_domain" {
     username = "USER1"
     password = "PASSWORD1"
   }]
+  uplinks = [
+    {
+      id   = 1
+      name = "UL1"
+    },
+    {
+      id   = 2
+      name = "UL2"
+    }
+  ]
 }
 ```
 
@@ -65,8 +85,10 @@ module "aci_vmware_vmm_domain" {
 | <a name="input_vswitch_cdp_policy"></a> [vswitch\_cdp\_policy](#input\_vswitch\_cdp\_policy) | vSwitch CDP policy name. | `string` | `""` | no |
 | <a name="input_vswitch_lldp_policy"></a> [vswitch\_lldp\_policy](#input\_vswitch\_lldp\_policy) | vSwitch LLDP policy name. | `string` | `""` | no |
 | <a name="input_vswitch_port_channel_policy"></a> [vswitch\_port\_channel\_policy](#input\_vswitch\_port\_channel\_policy) | vSwitch port channel policy name. | `string` | `""` | no |
+| <a name="input_vswitch_enhanced_lags"></a> [vswitch\_enhanced\_lags](#input\_vswitch\_enhanced\_lags) | vSwitch enhanced lags. Allowed values for `lb_mode`: `dst-ip`, `dst-ip-l4port`, `dst-ip-vlan`, `dst-ip-l4port-vlan`, `dst-mac`, `dst-l4port`, `src-ip`, `src-ip-l4port`, `src-ip-vlan`, `src-ip-l4port-vlan`, `src-mac`, `src-l4port`, `src-dst-ip`, `src-dst-ip-l4port`, `src-dst-ip-vlan`, `src-dst-ip-l4port-vlan`, `src-dst-mac`, `src-dst-l4port`, `src-port-id` or `vlan`. Default value: `src-dst-ip`. Allowed values for `mode`: `active` or `passive`. Defautl value: `active`. Allowed range for `num_links`: 2-8. | <pre>list(object({<br>    name      = string<br>    lb_mode   = optional(string, "src-dst-ip")<br>    mode      = optional(string, "active")<br>    num_links = optional(number, 2)<br>  }))</pre> | `[]` | no |
 | <a name="input_vcenters"></a> [vcenters](#input\_vcenters) | List of vCenter hosts. Choices `dvs_version`: `unmanaged`, `5.1`, `5.5`, `6.0`, `6.5`, `6.6`. Default value `dvs_version`: `unmanaged`. Default value `statistics`: false. Allowed values `mgmt_epg_type`: `inb`, `oob`. Default value `mgmt_epg_type`: `inb`. | <pre>list(object({<br>    name              = string<br>    hostname_ip       = string<br>    datacenter        = string<br>    credential_policy = optional(string)<br>    dvs_version       = optional(string, "unmanaged")<br>    statistics        = optional(bool, false)<br>    mgmt_epg_type     = optional(string, "inb")<br>    mgmt_epg_name     = optional(string)<br>  }))</pre> | `[]` | no |
 | <a name="input_credential_policies"></a> [credential\_policies](#input\_credential\_policies) | List of vCenter credentials. | <pre>list(object({<br>    name     = string<br>    username = string<br>    password = string<br>  }))</pre> | `[]` | no |
+| <a name="input_uplinks"></a> [uplinks](#input\_uplinks) | Lis of vSwitch uplinks. Allowed range for `id`: 1-32 | <pre>list(object({<br>    id   = number<br>    name = string<br>  }))</pre> | `[]` | no |
 
 ## Outputs
 
@@ -80,6 +102,7 @@ module "aci_vmware_vmm_domain" {
 | Name | Type |
 |------|------|
 | [aci_rest_managed.infraRsVlanNs](https://registry.terraform.io/providers/CiscoDevNet/aci/latest/docs/resources/rest_managed) | resource |
+| [aci_rest_managed.lacpEnhancedLagPol](https://registry.terraform.io/providers/CiscoDevNet/aci/latest/docs/resources/rest_managed) | resource |
 | [aci_rest_managed.vmmCtrlrP](https://registry.terraform.io/providers/CiscoDevNet/aci/latest/docs/resources/rest_managed) | resource |
 | [aci_rest_managed.vmmDomP](https://registry.terraform.io/providers/CiscoDevNet/aci/latest/docs/resources/rest_managed) | resource |
 | [aci_rest_managed.vmmRsAcc](https://registry.terraform.io/providers/CiscoDevNet/aci/latest/docs/resources/rest_managed) | resource |
@@ -87,6 +110,8 @@ module "aci_vmware_vmm_domain" {
 | [aci_rest_managed.vmmRsVswitchOverrideCdpIfPol](https://registry.terraform.io/providers/CiscoDevNet/aci/latest/docs/resources/rest_managed) | resource |
 | [aci_rest_managed.vmmRsVswitchOverrideLacpPol](https://registry.terraform.io/providers/CiscoDevNet/aci/latest/docs/resources/rest_managed) | resource |
 | [aci_rest_managed.vmmRsVswitchOverrideLldpIfPol](https://registry.terraform.io/providers/CiscoDevNet/aci/latest/docs/resources/rest_managed) | resource |
+| [aci_rest_managed.vmmUplinkP](https://registry.terraform.io/providers/CiscoDevNet/aci/latest/docs/resources/rest_managed) | resource |
+| [aci_rest_managed.vmmUplinkPCont](https://registry.terraform.io/providers/CiscoDevNet/aci/latest/docs/resources/rest_managed) | resource |
 | [aci_rest_managed.vmmUsrAccP](https://registry.terraform.io/providers/CiscoDevNet/aci/latest/docs/resources/rest_managed) | resource |
 | [aci_rest_managed.vmmVSwitchPolicyCont](https://registry.terraform.io/providers/CiscoDevNet/aci/latest/docs/resources/rest_managed) | resource |
 <!-- END_TF_DOCS -->

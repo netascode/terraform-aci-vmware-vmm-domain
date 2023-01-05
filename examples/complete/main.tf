@@ -10,6 +10,16 @@ module "aci_vmware_vmm_domain" {
   vswitch_cdp_policy          = "CDP1"
   vswitch_lldp_policy         = "LLDP1"
   vswitch_port_channel_policy = "PC1"
+  vswitch_enhanced_lags = [
+    {
+      name    = "ELAG1"
+      mode    = "passive"
+      lb_mode = "dst-ip-l4port"
+    },
+    {
+      name = "ELAG2"
+    }
+  ]
   vcenters = [{
     name              = "VC1"
     hostname_ip       = "1.1.1.1"
@@ -24,4 +34,14 @@ module "aci_vmware_vmm_domain" {
     username = "USER1"
     password = "PASSWORD1"
   }]
+  uplinks = [
+    {
+      id   = 1
+      name = "UL1"
+    },
+    {
+      id   = 2
+      name = "UL2"
+    }
+  ]
 }
