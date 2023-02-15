@@ -1,4 +1,4 @@
-## 0.2.3 (unreleased)
+## 0.2.3
 
 - Make the `password` variable sensitive
 
