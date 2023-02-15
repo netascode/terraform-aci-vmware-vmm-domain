@@ -1,3 +1,7 @@
+## 0.2.3 (unreleased)
+
+- Make the `password` variable sensitive
+
 ## 0.2.2
 
 - Add enhanced LAG configuration
