@@ -86,7 +86,7 @@ resource "aci_rest_managed" "vmmUsrAccP" {
   content = {
     name = each.value.name
     usr  = each.value.username
-    pwd  = each.value.password
+    pwd  = sensitive(each.value.password)
   }
 
   lifecycle {
