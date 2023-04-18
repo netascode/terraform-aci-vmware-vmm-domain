@@ -50,6 +50,15 @@ resource "aci_rest_managed" "vmmRsVswitchOverrideLacpPol" {
   }
 }
 
+resource "aci_rest_managed" "vmmRsVswitchOverrideMtuPol" {
+  count      = var.vswitch_port_channel_policy != "" ? 1 : 0
+  dn         = "${aci_rest_managed.vmmVSwitchPolicyCont.dn}/rsvswitchOverrideMtuPol"
+  class_name = "vmmRsVswitchOverrideMtuPol"
+  content = {
+    tDn = "uni/fabric/l2pol-${var.vswitch_mtu_policy}"
+  }
+}
+
 resource "aci_rest_managed" "lacpEnhancedLagPol" {
   for_each   = { for elag in var.vswitch_enhanced_lags : elag.name => elag }
   dn         = "${aci_rest_managed.vmmVSwitchPolicyCont.dn}/enlacplagp-${each.value.name}"
