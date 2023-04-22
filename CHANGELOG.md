@@ -1,3 +1,7 @@
+## 0.2.4 (unreleased)
+
+- Add `vswitch_mtu_policy` variable
+
 ## 0.2.3
 
 - Make the `password` variable sensitive
