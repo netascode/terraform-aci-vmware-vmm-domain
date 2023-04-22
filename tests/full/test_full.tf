@@ -24,6 +24,7 @@ module "main" {
   vswitch_cdp_policy          = "CDP1"
   vswitch_lldp_policy         = "LLDP1"
   vswitch_port_channel_policy = "PC1"
+  vswitch_mtu_policy          = "L2_8950"
   vswitch_enhanced_lags = [
     {
       name      = "ELAG1"
@@ -156,6 +157,22 @@ resource "test_assertions" "vmmRsVswitchOverrideLacpPol" {
     description = "tDn"
     got         = data.aci_rest_managed.vmmRsVswitchOverrideLacpPol.content.tDn
     want        = "uni/infra/lacplagp-PC1"
+  }
+}
+
+data "aci_rest_managed" "vmmRsVswitchOverrideMtuPol" {
+  dn = "${data.aci_rest_managed.vmmDomP.id}/vswitchpolcont/rsvswitchOverrideMtuPol"
+
+  depends_on = [module.main]
+}
+
+resource "test_assertions" "vmmRsVswitchOverrideMtuPol" {
+  component = "vmmRsVswitchOverrideMtuPol"
+
+  equal "tDn" {
+    description = "tDn"
+    got         = data.aci_rest_managed.vmmRsVswitchOverrideMtuPol.content.tDn
+    want        = "uni/fabric/l2pol-L2_8950"
   }
 }
 
