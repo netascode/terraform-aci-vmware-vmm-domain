@@ -1,4 +1,4 @@
-## 0.2.5 (unreleased)
+## 0.2.5
 
 - Fix conditional provisioning of `vmmRsVswitchOverrideMtuPol` object
 
