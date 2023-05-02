@@ -25,14 +25,12 @@ module "main" {
   vswitch_lldp_policy         = "LLDP1"
   vswitch_port_channel_policy = "PC1"
   vswitch_mtu_policy          = "L2_8950"
-  vswitch_enhanced_lags = [
-    {
-      name      = "ELAG1"
-      mode      = "passive"
-      lb_mode   = "dst-ip-l4port"
-      num_links = 2
-    }
-  ]
+  vswitch_enhanced_lags = [{
+    name      = "ELAG1"
+    mode      = "passive"
+    lb_mode   = "dst-ip-l4port"
+    num_links = 2
+  }]
   vcenters = [{
     name              = "VC1"
     hostname_ip       = "1.1.1.1"
@@ -47,12 +45,10 @@ module "main" {
     username = "domain\\USER1"
     password = "PASSWORD1"
   }]
-  uplinks = [
-    {
-      id   = 10
-      name = "UL10"
-    }
-  ]
+  uplinks = [{
+    id   = 10
+    name = "UL10"
+  }]
 }
 
 
