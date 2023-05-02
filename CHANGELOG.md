@@ -1,3 +1,7 @@
+## 0.2.5 (unreleased)
+
+- Fix conditional provisioning of `vmmRsVswitchOverrideMtuPol` object
+
 ## 0.2.4
 
 - Add `vswitch_mtu_policy` variable

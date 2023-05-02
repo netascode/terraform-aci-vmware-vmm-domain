@@ -51,7 +51,7 @@ resource "aci_rest_managed" "vmmRsVswitchOverrideLacpPol" {
 }
 
 resource "aci_rest_managed" "vmmRsVswitchOverrideMtuPol" {
-  count      = var.vswitch_port_channel_policy != "" ? 1 : 0
+  count      = var.vswitch_mtu_policy != "" ? 1 : 0
   dn         = "${aci_rest_managed.vmmVSwitchPolicyCont.dn}/rsvswitchOverrideMtuPol"
   class_name = "vmmRsVswitchOverrideMtuPol"
   content = {
