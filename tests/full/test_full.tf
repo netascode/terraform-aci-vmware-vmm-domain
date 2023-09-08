@@ -25,6 +25,7 @@ module "main" {
   vswitch_lldp_policy         = "LLDP1"
   vswitch_port_channel_policy = "PC1"
   vswitch_mtu_policy          = "L2_8950"
+  security_domains            = ["SEC1"]
   vswitch_enhanced_lags = [{
     name      = "ELAG1"
     mode      = "passive"
@@ -50,7 +51,6 @@ module "main" {
     name = "UL10"
   }]
 }
-
 
 data "aci_rest_managed" "vmmDomP" {
   dn = "uni/vmmp-VMware/dom-${module.main.name}"
@@ -344,5 +344,21 @@ resource "test_assertions" "vmmUplinkP" {
     description = "uplinkName"
     got         = data.aci_rest_managed.vmmUplinkP.content.uplinkName
     want        = "UL10"
+  }
+}
+
+data "aci_rest_managed" "aaaDomainRef" {
+  dn = "${data.aci_rest_managed.vmmDomP.dn}/domain-SEC1"
+
+  depends_on = [module.main]
+}
+
+resource "test_assertions" "aaaDomainRef" {
+  component = "aaaDomainRef"
+
+  equal "name" {
+    description = "name"
+    got         = data.aci_rest_managed.aaaDomainRef.content.name
+    want        = "SEC1"
   }
 }

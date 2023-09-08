@@ -11,6 +11,7 @@ module "aci_vmware_vmm_domain" {
   vswitch_lldp_policy         = "LLDP1"
   vswitch_port_channel_policy = "PC1"
   vswitch_mtu_policy          = "L2-8950"
+  security_domains            = ["SEC1"]
   vswitch_enhanced_lags = [
     {
       name    = "ELAG1"
