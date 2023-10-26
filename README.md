@@ -24,6 +24,7 @@ module "aci_vmware_vmm_domain" {
   vswitch_lldp_policy         = "LLDP1"
   vswitch_port_channel_policy = "PC1"
   vswitch_mtu_policy          = "L2-8950"
+  security_domains            = ["SEC1"]
   vswitch_enhanced_lags = [
     {
       name    = "ELAG1"
@@ -91,6 +92,7 @@ module "aci_vmware_vmm_domain" {
 | <a name="input_vcenters"></a> [vcenters](#input\_vcenters) | List of vCenter hosts. Choices `dvs_version`: `unmanaged`, `5.1`, `5.5`, `6.0`, `6.5`, `6.6`. Default value `dvs_version`: `unmanaged`. Default value `statistics`: false. Allowed values `mgmt_epg_type`: `inb`, `oob`. Default value `mgmt_epg_type`: `inb`. | <pre>list(object({<br>    name              = string<br>    hostname_ip       = string<br>    datacenter        = string<br>    credential_policy = optional(string)<br>    dvs_version       = optional(string, "unmanaged")<br>    statistics        = optional(bool, false)<br>    mgmt_epg_type     = optional(string, "inb")<br>    mgmt_epg_name     = optional(string)<br>  }))</pre> | `[]` | no |
 | <a name="input_credential_policies"></a> [credential\_policies](#input\_credential\_policies) | List of vCenter credentials. | <pre>list(object({<br>    name     = string<br>    username = string<br>    password = string<br>  }))</pre> | `[]` | no |
 | <a name="input_uplinks"></a> [uplinks](#input\_uplinks) | List of vSwitch uplinks. Allowed range for `id`: 1-32. | <pre>list(object({<br>    id   = number<br>    name = string<br>  }))</pre> | `[]` | no |
+| <a name="input_security_domains"></a> [security\_domains](#input\_security\_domains) | Security domains associated to VMware VMM domain | `list(string)` | `[]` | no |
 
 ## Outputs
 
@@ -103,6 +105,7 @@ module "aci_vmware_vmm_domain" {
 
 | Name | Type |
 |------|------|
+| [aci_rest_managed.aaaDomainRef](https://registry.terraform.io/providers/CiscoDevNet/aci/latest/docs/resources/rest_managed) | resource |
 | [aci_rest_managed.infraRsVlanNs](https://registry.terraform.io/providers/CiscoDevNet/aci/latest/docs/resources/rest_managed) | resource |
 | [aci_rest_managed.lacpEnhancedLagPol](https://registry.terraform.io/providers/CiscoDevNet/aci/latest/docs/resources/rest_managed) | resource |
 | [aci_rest_managed.vmmCtrlrP](https://registry.terraform.io/providers/CiscoDevNet/aci/latest/docs/resources/rest_managed) | resource |

@@ -140,3 +140,12 @@ resource "aci_rest_managed" "vmmUplinkP" {
     uplinkName = each.value.name
   }
 }
+
+resource "aci_rest_managed" "aaaDomainRef" {
+  for_each   = toset(var.security_domains)
+  dn         = "${aci_rest_managed.vmmDomP.dn}/domain-${each.value}"
+  class_name = "aaaDomainRef"
+  content = {
+    name = each.value
+  }
+}

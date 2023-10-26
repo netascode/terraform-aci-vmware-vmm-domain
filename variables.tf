@@ -240,3 +240,16 @@ variable "uplinks" {
     error_message = "Allowed range for `id`: 1-32."
   }
 }
+
+variable "security_domains" {
+  description = "Security domains associated to VMware VMM domain"
+  type        = list(string)
+  default     = []
+
+  validation {
+    condition = alltrue([
+      for s in var.security_domains : can(regex("^[a-zA-Z0-9_.:-]{0,64}$", s))
+    ])
+    error_message = "Allowed characters: `a`-`z`, `A`-`Z`, `0`-`9`, `_`, `.`, `:`, `-`. Maximum characters: 64."
+  }
+}
