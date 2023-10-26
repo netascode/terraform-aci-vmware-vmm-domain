@@ -1,4 +1,4 @@
-## 0.2.6 (unreleased)
+## 0.2.6
 
 - Add support for security domains
 
