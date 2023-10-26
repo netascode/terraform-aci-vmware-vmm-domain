@@ -13,7 +13,7 @@ Location in GUI:
 ```hcl
 module "aci_vmware_vmm_domain" {
   source  = "netascode/vmware-vmm-domain/aci"
-  version = ">= 0.2.5"
+  version = ">= 0.2.6"
 
   name                        = "VMW1"
   access_mode                 = "read-only"

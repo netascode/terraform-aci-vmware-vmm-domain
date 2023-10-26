@@ -1,3 +1,7 @@
+## 0.2.6 (unreleased)
+
+- Add support for security domains
+
 ## 0.2.5
 
 - Fix conditional provisioning of `vmmRsVswitchOverrideMtuPol` object
