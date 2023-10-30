@@ -25,8 +25,8 @@ variable "delimiter" {
   default     = ""
 
   validation {
-    condition     = var.delimiter == "" || can(regex("^[^a-zA-Z0-9;>\"-*`,-.;/\\{}:?&<]$", var.delimiter))
-    error_message = "Maximum characters: 1."
+    condition     = var.delimiter == "" || can(regex("^[|~!@^+=]$", var.delimiter))
+    error_message = "Allowed characters: `|`, `~`, `!`, `@`, `^`, `+`, `=`. Maximum characters: 1."
   }
 }
 
