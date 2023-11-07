@@ -25,8 +25,8 @@ variable "delimiter" {
   default     = ""
 
   validation {
-    condition     = var.delimiter == "" || can(regex("^[^a-zA-Z0-9;>\"-*`,-.;/\\{}:?&<]$", var.delimiter))
-    error_message = "Maximum characters: 1."
+    condition     = var.delimiter == "" || can(regex("^[|~!@^+=]$", var.delimiter))
+    error_message = "Allowed characters: `|`, `~`, `!`, `@`, `^`, `+`, `=`. Maximum characters: 1."
   }
 }
 
@@ -102,9 +102,9 @@ variable "vswitch_enhanced_lags" {
 
   validation {
     condition = alltrue([
-      for elag in var.vswitch_enhanced_lags : can(regex("^[a-zA-Z0-9_.-]{0,64}$", elag.name))
+      for elag in var.vswitch_enhanced_lags : can(regex("^[a-zA-Z0-9_.:-]{0,16}$", elag.name))
     ])
-    error_message = "Allowed characters `name`: `a`-`z`, `A`-`Z`, `0`-`9`, `_`, `.`, `-`. Maximum characters: 64."
+    error_message = "Allowed characters `name`: `a`-`z`, `A`-`Z`, `0`-`9`, `_`, `.`, `:`, `-`. Maximum characters: 16."
   }
 
   validation {
