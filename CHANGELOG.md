@@ -1,4 +1,4 @@
-## 0.2.7 (unreleased)
+## 0.2.7
 
 - Fix validation of `delimiter` and ELAG `name` variables
 
