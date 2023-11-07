@@ -1,3 +1,7 @@
+## 0.2.7 (unreleased)
+
+- Fix validation of `delimiter` and ELAG `name` variables
+
 ## 0.2.6
 
 - Add support for security domains
